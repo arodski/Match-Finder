@@ -1,3 +1,6 @@
+Match-Finder
+=====
+
 MatchFinder is PHP web application that allows for local multiplayer matchmaking based on a user's team skill level and preferences to ensure fair competition.
 
 To get started:
