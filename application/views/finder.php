@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<hmtl>
+<html lang="en">
 	<head>
-		<title>Find Match</title>
+		<title>Similar Rated Teams</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link type="text/css" rel="stylesheet" href="../bootstrap/css/bootstrap.css"/>
+		<link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.css" media="screen">
+		<link rel="stylesheet" type="text/css" href="../bootstrap/css/style.css" media="screen">
 	</head>
 	<body>
 		<div class="list-group">
@@ -12,7 +13,7 @@
 			foreach($similar_teams as $team) {
 				if($current_league != $team['league']) {
 					$current_league = $team['league'];
-					echo "<h3>". $team['league'] ."</h3>";
+					echo "<h2 class='text-left'>". $team['league'] ."</h2>";
 				}
 
 				$team_no_spaces = str_replace(' ', '_', $team['name']);
@@ -36,9 +37,7 @@
 			?>
 		</div>
 
-		<script src="../bootstrap/js/jquery.js"></script>
 		<script src="../bootstrap/js/bootstrap.js"></script>
-		<script src="../jquery-2.0.3.js"></script>
-		<script src="../loadContent.js"></script>
+		<script src="../bootstrap/jquery-2.1.0.min.js"></script>
 	</body>
 </html>

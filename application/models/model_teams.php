@@ -144,20 +144,20 @@
 			$this->db->from('teams');
 			$this->db->join('leagues', 'leagues.league = teams.league');
 			$this->db->where('teams.league', $get_league->row()->league);
-			$this->db->where('attack <', $attack + 3);
-			$this->db->where('attack >', $attack - 3);
-			$this->db->where('midfield <', $midfield + 3);
-			$this->db->where('midfield >', $midfield - 3);
-			$this->db->where('defense <', $defense + 3);
-			$this->db->where('defense >', $defense - 3);
+			$this->db->where('attack <', $attack + 10);
+			$this->db->where('attack >', $attack - 10);
+			$this->db->where('midfield <', $midfield + 10);
+			$this->db->where('midfield >', $midfield - 10);
+			$this->db->where('defense <', $defense + 10);
+			$this->db->where('defense >', $defense - 10);
 			$query = $this->db->get();
 
 			if($query->num_rows() < 10) {
 				$prev_query = $this->db->last_query();
 				$query1 = " OR ((country = ";
 				$query2 = "(SELECT country FROM leagues WHERE league = (SELECT league FROM teams WHERE team = '" . $this->session->userdata('team') . "')))";
-				$query3 = "AND ((attack BETWEEN (? - 3) AND (? + 3)) AND 
-						(midfield BETWEEN (? - 3) AND (? + 3)) AND (defense BETWEEN (? - 3) AND (? + 3)))) ORDER BY teams.league";
+				$query3 = "AND ((attack BETWEEN (? - 5) AND (? + 5)) AND 
+						(midfield BETWEEN (? - 5) AND (? + 5)) AND (defense BETWEEN (? - 5) AND (? + 5)))) ORDER BY teams.league";
 				$bind_values = array($attack, $attack, $midfield, $midfield, $defense, $defense);
 				$query = $prev_query . $query1 . $query2 . $query3;
 				$query = $this->db->query($query, $bind_values);

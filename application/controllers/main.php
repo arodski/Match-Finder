@@ -8,137 +8,107 @@
 		}
 	
 		public function home() {
-			$this->load->model('model_teams'); 
-			$data = $this->model_teams->get_team_countries();
-
-			$this->load->view('header', $data);	
+			$this->load->view('header');	
 			$this->load->view('welcome');
-			$this->load->view('footer');		
-		}
-
-		public function account() {
-			if($this->session->userdata('is_logged_in')) {
-				$this->load->model('model_teams'); 
-				$data = $this->model_teams->get_team_countries();
-				$fav_teams = $this->model_teams->get_favorite_teams();
-
-				$this->load->view('header', $data);	
-				$this->load->view('account', $fav_teams);
-				$this->load->view('footer');
-			}
-			else {
-				redirect('main/restricted');
-			}
-		}
-
-		public function restricted() {
-			$this->load->model('model_teams'); 
-			$data = $this->model_teams->get_team_countries();
-			
-			$this->load->view('header', $data);	
-			$this->load->view('restricted');
 			$this->load->view('footer');
 		}
 
-		public function login() {
+		public function account() {
 			$this->load->model('model_teams'); 
-			$data = $this->model_teams->get_team_countries();
+			$fav_teams = $this->model_teams->get_favorite_teams();
 
-			$this->load->view('header', $data);
+			$this->load->view('header');	
+			$this->load->view('account', $fav_teams);
+			$this->load->view('footer');
+		}
+
+		public function login() {; 
+			$this->load->view('header');
 			$this->load->view('login');
 			$this->load->view('footer');
 		}
 
 		public function signup() {
-			$this->load->model('model_teams'); 
-			$data = $this->model_teams->get_team_countries();
-
-			$this->load->view('header', $data);
+			$this->load->view('header');
 			$this->load->view('signup');
 			$this->load->view('footer');
 		}
 
 		public function finder() {
 			$this->load->model('model_teams'); 
-			$data = $this->model_teams->get_team_countries();
-
 			$selected_team_ratings = $this->model_teams->get_team_ratings();
 			$similar_teams = $this->model_teams->search_similar_teams($selected_team_ratings);
 
-			$this->load->view('header', $data);
+			$this->load->view('header');
 			$this->load->view('finder', array('similar_teams' => $similar_teams));
 			$this->load->view('footer');
 		}
 
 		public function teams() {
-			if($this->session->userdata('is_logged_in')) {
-				$this->load->model('model_teams'); 
-				$data = $this->model_teams->get_team_countries();
-				$teamRatings = $this->model_teams->get_team_ratings();
+			$this->load->model('model_teams'); 
+			$teamRatings = $this->model_teams->get_team_ratings();
 
-				$this->load->view('header', $data);
-				$this->load->view('teams', $teamRatings);
-				$this->load->view('footer');
-			}
-			else {
-				redirect('main/restricted');
-			}
+			$this->load->view('header');
+			$this->load->view('teams', $teamRatings);
+			$this->load->view('footer');
 		}
 
-		public function result() {
-			$this->load->model('model_teams'); 
-			$data = $this->model_teams->get_team_countries();
-			
-			$this->load->view('header', $data);	
+		public function result() {			
+			$this->load->view('header');	
 			$this->load->view('score');
 			$this->load->view('footer');
 		}
 
 		public function find_match() {
-			if($this->session->userdata('is_logged_in')) {
-				$this->load->model('model_teams'); 
-				$data = $this->model_teams->get_team_countries();
-				$favTeams = $this->model_teams->get_favorite_teams();
+			$this->load->model('model_teams'); 
+			$favTeams = $this->model_teams->get_favorite_teams();
 
-				if(!$this->input->post('attack_min') AND !$this->input->post('attack_max') AND !$this->input->post('midfield_min')
-					AND !$this->input->post('midfield_max') AND !$this->input->post('defense_min') AND !$this->input->post('defense_max')) {
-					$teams = FALSE;
-				}
-				else {
-					$search_ratings = array(
-						'attack_min' => $this->input->post('attack_min'),
-						'attack_max' => $this->input->post('attack_max'),
-						'midfield_min' => $this->input->post('midfield_min'),
-						'midfield_max' => $this->input->post('midfield_max'),
-						'defense_min' => $this->input->post('defense_min'),
-						'defense_max' => $this->input->post('defense_max')
-					);
+			$this->load->library('form_validation');
+			$this->form_validation->set_rules('attack_min', 'Attack_min', 'trim|xss_clean|integer');
+			$this->form_validation->set_rules('attack_max', 'Attack_max', 'trim|xss_clean|integer');
+			$this->form_validation->set_rules('midfield_min', 'Midfield_min', 'trim|xss_clean|integer');
+			$this->form_validation->set_rules('midfield_max', 'Midfield_max', 'trim|xss_clean|integer');
+			$this->form_validation->set_rules('defense_min', 'Defense_min', 'trim|xss_clean|integer');
+			$this->form_validation->set_rules('defense_max', 'Defense_max', 'trim|xss_clean|integer');
 
-					if(empty($search_ratings['attack_max'])) {
-						$search_ratings['attack_max'] = 100;
-					}
-					if(empty($search_ratings['midfield_max'])) {
-						$search_ratings['midfield_max'] = 100;
-					}
-					if(empty($search_ratings['defense_max'])) {
-						$search_ratings['defense_max'] = 100;
-					}
-
-					$teams = $this->model_teams->filter_teams($search_ratings);
-				}
-
-				$teamData = array(
-					'favTeams' => $favTeams,
-					'teams_filtered' => $teams
-				);
-				
-				$this->load->view('header', $data);	
-				$this->load->view('match', $teamData);
-				$this->load->view('footer');
+			if($this->form_validation->run() == FALSE) {
+				$teams = FALSE;
+			}
+			else if(!$this->input->post('attack_min') AND !$this->input->post('attack_max') AND !$this->input->post('midfield_min')
+				AND !$this->input->post('midfield_max') AND !$this->input->post('defense_min') AND !$this->input->post('defense_max')) {
+				$teams = FALSE;
 			}
 			else {
-				redirect('main/restricted');
+				$search_ratings = array(
+					'attack_min' => $this->input->post('attack_min'),
+					'attack_max' => $this->input->post('attack_max'),
+					'midfield_min' => $this->input->post('midfield_min'),
+					'midfield_max' => $this->input->post('midfield_max'),
+					'defense_min' => $this->input->post('defense_min'),
+					'defense_max' => $this->input->post('defense_max')
+				);
+
+				if(empty($search_ratings['attack_max'])) {
+					$search_ratings['attack_max'] = 100;
+				}
+				if(empty($search_ratings['midfield_max'])) {
+					$search_ratings['midfield_max'] = 100;
+				}
+				if(empty($search_ratings['defense_max'])) {
+					$search_ratings['defense_max'] = 100;
+				}
+
+				$teams = $this->model_teams->filter_teams($search_ratings);
 			}
+
+			$teamData = array(
+				'favTeams' => $favTeams,
+				'teams_filtered' => $teams
+			);
+			
+			$this->load->view('header');	
+			$this->load->view('match', $teamData);
+			$this->load->view('footer');
 		}
 
 		public function selected_team($team_name) {
@@ -156,8 +126,6 @@
 			$this->session->set_userdata($teamData);
 			redirect('main/finder');
 		}
-
-		
 
 		public function match_result($team_name) {
 			$team_name = str_replace("_", " ", $team_name);
@@ -191,45 +159,22 @@
 				$this->load->model('model_matches');
 				$this->model_matches->save_match_entry($user_email, $opponent_email, $team, $opponent, $user_score, $opponent_score);
 				$this->model_matches->save_match_entry($opponent_email, $user_email, $opponent, $team, $opponent_score, $user_score);
-				redirect('main/post');
+				redirect('main/history');
 			}
 			else {
-				redirect('main/result');
+				$this->load->view('header');	
+				$this->load->view('score');
+				$this->load->view('footer');
 			}
-		}
-
-		public function post() {
-			$this->load->model('model_teams'); 
-			$data = $this->model_teams->get_team_countries();
-
-			$match_results = array(
-				'user_email' => $this->session->userdata('email'),
-				'opponent_email' => $this->session->userdata('opponent_email'),
-				'team' => $this->session->userdata('team'),
-				'opponent' => $this->session->userdata('opponent'),
-				'user_score' => $this->session->userdata('user_score'),
-				'opponent_score' => $this->session->userdata('opponent_score')
-			);
-
-			$this->load->view('header', $data);	
-			$this->load->view('post', $match_results);
-			$this->load->view('footer');	
 		}
 
 		public function history() {
-			if($this->session->userdata('is_logged_in')) {
-				$this->load->model('model_teams');
-				$this->load->model('model_matches');
-				$data = $this->model_teams->get_team_countries();
-				$match_records = $this->model_matches->list_previous_matches();
-				
-				$this->load->view('header', $data);	
-				$this->load->view('history', array('match_records' => $match_records));
-				$this->load->view('footer');
-			}
-			else {
-				redirect('main/restricted');
-			}
+			$this->load->model('model_matches');
+			$match_records = $this->model_matches->list_previous_matches();
+			
+			$this->load->view('header');	
+			$this->load->view('history', array('match_records' => $match_records));
+			$this->load->view('footer');
 		}
 
 		public function team_ratings() {
@@ -249,13 +194,13 @@
 			$this->load->model('model_teams');
 			$favTeamFields  = $this->model_teams->get_favorite_teams();
 
-			if($favTeamFields['favTeam1'] == '') {
+			if($favTeamFields['fav_team1'] == '') {
 				$this->model_teams->insert_favorite_team('favoriteTeam1');
 			}
-			else if($favTeamFields['favTeam2'] == '') {
+			else if($favTeamFields['fav_team2'] == '') {
 				$this->model_teams->insert_favorite_team('favoriteTeam2');
 			}
-			else if($favTeamFields['favTeam3'] == '') {
+			else if($favTeamFields['fav_team3'] == '') {
 				$this->model_teams->insert_favorite_team('favoriteTeam3');
 			}
 
@@ -284,7 +229,9 @@
 				redirect('main/home');
 			} 
 			else {
-				redirect('main/login');
+				$this->load->view('header');
+				$this->load->view('login');
+				$this->load->view('footer');
 			}
 		}
 
@@ -292,8 +239,8 @@
 			$this->load->library('form_validation');
 
 			$this->form_validation->set_rules('email', 'Email', 'required|trim|xss_clean|valid_email|is_unique[users.email]');
-			$this->form_validation->set_rules('password', 'Password', 'required|trim');
-			$this->form_validation->set_rules('cpassword', 'Confirm Password', 'required|trim|matches[password]');
+			$this->form_validation->set_rules('password', 'Password', 'required|min_length[8]|trim');
+			$this->form_validation->set_rules('cpassword', 'Confirm Password', 'required|matches[password]|trim');
 			
 			$this->form_validation->set_message('is_unique', 'That email address already exists.');
 
@@ -312,10 +259,10 @@
 				
 				$this->email->message($message);
 
-				// send and email to the user
+				// send an email to the user
 				if ($this->model_users->add_temp_user($key)) {
 					if ($this->email->send()) {
-						redirect('main/signup');
+						redirect('main/home');
 					}
 					else {
 						echo "Could not send the email.";
@@ -326,7 +273,9 @@
 				}
 			}
 			else {
-				redirect('main/signup');
+				$this->load->view('header');
+				$this->load->view('signup');
+				$this->load->view('footer');
 			}
 		}
 
@@ -351,6 +300,7 @@
 				return true;
 			}
 
+			$this->form_validation->set_message('validate_email', 'Email does not exist');
 			return false;
 		}
 
@@ -384,18 +334,24 @@
 
 		public function change_password() {
 			$this->load->library('form_validation');
-			$this->form_validation->set_rules('password', 'Password', 'required|md5|trim');
+			$this->form_validation->set_rules('password', 'Password', 'required|min_length[8]|md5|trim');
 			
-			$data = array(
-				'password' => md5($this->input->post('password'))
-			);
 			if($this->form_validation->run()) {
+				$data = array(
+					'password' => $this->input->post('password')
+				);
 				$this->db->where('email', $this->session->userdata('email'));
 				$this->db->update('users', $data);
+
 				redirect('main/account');
 			}
 			else {
-				redirect('main/account');
+				$this->load->model('model_teams'); 
+				$fav_teams = $this->model_teams->get_favorite_teams();
+
+				$this->load->view('header');	
+				$this->load->view('account', $fav_teams);
+				$this->load->view('footer');
 			}
 		}
 	}

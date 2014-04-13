@@ -1,47 +1,58 @@
 <!DOCTYPE html>
-<hmtl>
+<html lang="en">
 	<head>
-		<title>Score</title>
+		<title>Match Result</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link type="text/css" rel="stylesheet" href="../bootstrap/css/bootstrap.css"/>
+		<link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.css" media="screen">
+		<link rel="stylesheet" type="text/css" href="../bootstrap/css/style.css" media="screen">
 	</head>
 	<body>
-		<center>
-			<div class="well" style="width: 40%" style="text-align: center">
-				<form action="save_match_record" method="post">
-					<div class="form-group">
-						<table>
-							<tr align="center">
-								<?php
-								echo "<td>";
-									echo "<h4>" . $this->session->userdata('team') . "</h4>";
-									echo "<input type='text' name='user_score' id='user_score' placeholder='Score'/>";
-								echo "</td>";
-								echo "<td><h4>vs.</h4></td>";
-								echo "<td>";
-									echo "<h4>" . $this->session->userdata('opponent') . "</h4>";
-									echo "<input type='text' name='opponent_score' id='opponent_score' placeholder='Score'/>";
-								echo "</td>";
-								?>
-							</tr>
-						</table>
+		<h1>Match Result.</h1>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-xs-8 col-xs-offset-2 col-md-6 col-md-offset-3">
+					<div class="well">
+						<form class="form-horizontal" action="save_match_record" method="post">
+							<div class="form-group">
+								<div class="col-xs-3 col-xs-offset-1">
+									<?php echo "<h4>" . $this->session->userdata('team') . "</h4>"; ?>
+								</div>
+								<div class="col-xs-2 col-xs-offset-1">
+									<?php echo "<h4>vs.</h4>"; ?>
+								</div>
+								<div class="col-xs-3 col-xs-offset-1">	
+									<?php echo "<h4>" . $this->session->userdata('opponent') . "</h4>"; ?>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-xs-4 col-xs-offset-1">
+									<?php echo "<input type='text' class='form-control' name='user_score' id='user_score' placeholder='Score'/>"; ?>
+									<?php echo form_error('user_score'); ?>
+								</div>
+								<div class="col-xs-4 col-xs-offset-2">
+									<?php echo "<input type='text' class='form-control' name='opponent_score' id='opponent_score' placeholder='Score'/>" ?>
+									<?php echo form_error('opponent_score'); ?>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="email" class="col-xs-2 col-xs-offset-1">Email:</label>
+								<div class="col-xs-8">
+									<input type="text" class="form-control" name="opponent_email" id="opponent_email" placeholder="Enter opponent's email"/>
+									<?php echo form_error('opponent_email'); ?>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-xs-2 col-xs-offset-5">
+									<input type="submit" class="btn btn-primary" value="Submit"/>
+								</div>
+							</div>
+						</form>
 					</div>
-					<div class="form-group">
-						<label for="email">Email:</label>
-						<input type="text" name="opponent_email" id="opponent_email" style="width:50%" placeholder="Enter opponent's email"/>
-					</div>
-					<table>
-						<div class="form-group">
-							<input type="submit" class="btn btn-primary" value="Submit"/>
-						</div>
-					</form>
-				</table>
+				</div>
 			</div>
-		</center>
+		</div>
 
-		<script src="../bootstrap/js/jquery.js"></script>
 		<script src="../bootstrap/js/bootstrap.js"></script>
-		<script src="../jquery-2.0.3.js"></script>
-		<script src="../loadContent.js"></script>
+		<script src="../bootstrap/jquery-2.1.0.min.js"></script>
 	</body>
 </html>

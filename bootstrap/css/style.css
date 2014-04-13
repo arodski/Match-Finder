@@ -1,0 +1,124 @@
+/* ===========================================
+				Header
+=========================================== */
+.logo {
+	position: absolute;
+	top: 10px;
+	left: 3%;
+}
+
+.navbar-button {
+	position: absolute;
+	top: 15%;
+	right: 5%;
+}
+
+.dropdown-menu {
+	background-color: #000000;
+}
+
+/* ===========================================
+				Intro
+=========================================== */
+
+#myCarousel {
+	margin-top: -20px;
+}
+
+.img-banner{
+	min-width: 100%;
+	max-width: 100%;
+}
+
+.carousel-caption {
+	position: absolute;
+	top: 0;
+}
+
+.carousel-text {
+	color: #FFFFFF;
+	font-weight: 800;
+	text-align: left;
+	font-size: 500%;
+}
+
+.info-text {
+	margin-top: 30px;
+}
+
+.glyphicon-search,
+.glyphicon-resize-small,
+.glyphicon-play-circle {
+	font-size: 3em;
+	color: #FFFFFF;
+	margin: 27px 29px;
+}
+
+.glyphicon-circle {
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+	background: #428bca;
+	margin-bottom: 10px;
+}
+
+.glyphicon-green {
+	background: #5cb85c;
+}
+
+.glyphicon-yellow {
+	background: #f0ad4e;
+}
+
+h1, h3, h4 {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 600;
+	color: #000000;
+	text-align: center;
+}
+
+/* ===========================================
+				Footer
+=========================================== */
+
+.footer {
+	padding-bottom: 70px;
+}
+
+/* ===========================================
+		Log In | Sign Up | Account
+=========================================== */
+
+.well {
+	padding-left: 5%;
+}
+
+dd {
+	margin-bottom: 1%;
+}
+
+/* ===========================================
+				Teams
+=========================================== */
+
+#edit_ratings_div {
+	display: none;
+}
+
+/* ===========================================
+				Media Queries
+=========================================== */
+
+@media (max-width: 768px) {
+	.info-content > div {
+		display: block;
+		clear: both;
+		width: 100%;
+		margin-bottom: 5%;
+	}
+
+	.carousel-text {
+		font-size: 200%;
+	}
+}
+
